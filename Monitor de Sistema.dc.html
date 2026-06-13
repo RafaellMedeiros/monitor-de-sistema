@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;height:100%;background:#0B0E13;}
+*{box-sizing:border-box;}
+input,button,select{font-family:inherit;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-thumb{background:rgba(128,140,155,0.35);border-radius:5px;border:2px solid transparent;background-clip:content-box;}
+::-webkit-scrollbar-track{background:transparent;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
+</style>
+</helmet>
+<div style="{{ rootStyle }}" data-screen-label="Monitor de Sistema">
+<div style="height:100vh;display:flex;flex-direction:column;background:var(--bg0,#0B0E13);color:var(--tx,#E6EBF2);font-family:'IBM Plex Sans',sans-serif;font-size:13px;overflow:hidden">
+
+  <div style="height:38px;flex-shrink:0;display:flex;align-items:center;padding:0 14px;gap:8px;background:var(--bg1,#11151C);border-bottom:1px solid var(--bd,#232B36)">
+    <div style="display:flex;gap:7px;align-items:center">
+      <span style="width:12px;height:12px;border-radius:50%;background:#FF5F57;display:inline-block"></span>
+      <span style="width:12px;height:12px;border-radius:50%;background:#FEBC2E;display:inline-block"></span>
+      <span style="width:12px;height:12px;border-radius:50%;background:#28C840;display:inline-block"></span>
+    </div>
+    <div style="flex:1;text-align:center;font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">Monitor de Sistema — estacao-dev</div>
+    <div style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--tx3,#5E6B7C)">{{ liveDot }}<span>MONITORANDO</span></div>
+  </div>
+
+  <div style="flex:1;display:flex;min-height:0">
+
+    <div style="width:192px;flex-shrink:0;display:flex;flex-direction:column;gap:2px;padding:10px 8px;background:var(--bg1,#11151C);border-right:1px solid var(--bd,#232B36)">
+      <div style="font-size:10px;letter-spacing:1.4px;font-weight:600;color:var(--tx3,#5E6B7C);padding:4px 10px 8px">SISTEMA</div>
+      <sc-for list="{{ navItems }}" as="nv" hint-placeholder-count="5">
+        <div onClick="{{ nv.go }}" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:{{ nv.fw }};background:{{ nv.bg }};color:{{ nv.color }}" style-hover="background:var(--bg2,#1A2129)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="{{ nv.icon }}"></path><path d="{{ nv.icon2 }}"></path></svg>
+          <span>{{ nv.label }}</span>
+        </div>
+      </sc-for>
+      <div style="flex:1"></div>
+      <div style="padding:10px;border-top:1px solid var(--bd,#232B36);font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.7;color:var(--tx3,#5E6B7C)">
+        <div style="color:var(--tx2,#9AA6B5)">estacao-dev</div>
+        <div>Linux 6.8.0-41-generic</div>
+        <div>8 núcleos · 32 GiB</div>
+        <div>uptime {{ upStr }}</div>
+      </div>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;min-width:0;min-height:0">
+
+      <sc-if value="{{ showDash }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="Dashboard" style="flex:1;display:flex;flex-direction:column;gap:12px;padding:14px;min-height:0;overflow:auto">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;flex-shrink:0">
+            <div style="font-size:15px;font-weight:600">Dashboard</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx3,#5E6B7C)">tempo real · intervalo {{ refreshLabel }}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;flex-shrink:0">
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:3px">
+              <div style="font-size:10px;letter-spacing:1px;font-weight:600;color:var(--tx3,#5E6B7C)">TEMPERATURA</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:{{ tempColor }}">{{ tempStr }}</div>
+              <div style="font-size:11px;color:var(--tx3,#5E6B7C)">CPU · limite 96 °C</div>
+            </div>
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:3px">
+              <div style="font-size:10px;letter-spacing:1px;font-weight:600;color:var(--tx3,#5E6B7C)">UPTIME</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600">{{ upStr }}</div>
+              <div style="font-size:11px;color:var(--tx3,#5E6B7C)">desde a última inicialização</div>
+            </div>
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:3px">
+              <div style="font-size:10px;letter-spacing:1px;font-weight:600;color:var(--tx3,#5E6B7C)">PROCESSOS</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600">{{ procCount }}</div>
+              <div style="font-size:11px;color:var(--tx3,#5E6B7C)">{{ thrCount }} threads</div>
+            </div>
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:3px">
+              <div style="font-size:10px;letter-spacing:1px;font-weight:600;color:var(--tx3,#5E6B7C)">CARGA MÉDIA</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600">{{ load1Str }}</div>
+              <div style="font-size:11px;color:var(--tx3,#5E6B7C)">{{ loadSub }}</div>
+            </div>
+          </div>
+          <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;min-height:340px">
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:0">
+              <div style="display:flex;align-items:baseline;justify-content:space-between">
+                <span style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">CPU</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:{{ cpuColor }}">{{ cpuNowStr }}</span>
+              </div>
+              <div style="flex:1;min-height:0">
+                <svg viewBox="0 0 200 56" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+                  <line x1="0" y1="14" x2="200" y2="14" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <line x1="0" y1="28" x2="200" y2="28" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <line x1="0" y1="42" x2="200" y2="42" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <path d="{{ cpuA }}" fill="rgba(88,166,255,0.13)"></path>
+                  <path d="{{ cpuL }}" fill="none" stroke="#58A6FF" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                </svg>
+              </div>
+            </div>
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:0">
+              <div style="display:flex;align-items:baseline;justify-content:space-between">
+                <span style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">Memória</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#BC8CFF">{{ memNowStr }}</span>
+              </div>
+              <div style="flex:1;min-height:0">
+                <svg viewBox="0 0 200 56" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+                  <line x1="0" y1="14" x2="200" y2="14" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <line x1="0" y1="28" x2="200" y2="28" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <line x1="0" y1="42" x2="200" y2="42" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <path d="{{ memA }}" fill="rgba(188,140,255,0.12)"></path>
+                  <path d="{{ memL }}" fill="none" stroke="#BC8CFF" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                </svg>
+              </div>
+            </div>
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:0">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                <span style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">Disco · E/S</span>
+                <span style="display:flex;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx2,#9AA6B5)">
+                  <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F0883E;margin-right:5px"></span>L {{ ioRStr }}</span>
+                  <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#39C5CF;margin-right:5px"></span>E {{ ioWStr }}</span>
+                </span>
+              </div>
+              <div style="flex:1;min-height:0">
+                <svg viewBox="0 0 200 56" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+                  <line x1="0" y1="14" x2="200" y2="14" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <line x1="0" y1="28" x2="200" y2="28" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <line x1="0" y1="42" x2="200" y2="42" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <path d="{{ ioRL }}" fill="none" stroke="#F0883E" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                  <path d="{{ ioWL }}" fill="none" stroke="#39C5CF" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                </svg>
+              </div>
+            </div>
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:0">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                <span style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">Rede</span>
+                <span style="display:flex;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx2,#9AA6B5)">
+                  <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#39C5CF;margin-right:5px"></span>↓ {{ netDStr }}</span>
+                  <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#BC8CFF;margin-right:5px"></span>↑ {{ netUStr }}</span>
+                </span>
+              </div>
+              <div style="flex:1;min-height:0">
+                <svg viewBox="0 0 200 56" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+                  <line x1="0" y1="14" x2="200" y2="14" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <line x1="0" y1="28" x2="200" y2="28" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <line x1="0" y1="42" x2="200" y2="42" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                  <path d="{{ netDA }}" fill="rgba(57,197,207,0.10)"></path>
+                  <path d="{{ netDL }}" fill="none" stroke="#39C5CF" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                  <path d="{{ netUL }}" fill="none" stroke="#BC8CFF" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showProc }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Processos" style="flex:1;display:flex;flex-direction:column;gap:10px;padding:14px;min-height:0">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;flex-shrink:0">
+            <div style="font-size:15px;font-weight:600">Processos</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx3,#5E6B7C)">{{ procShown }} de {{ procCount }} processos</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+            <input value="{{ filter }}" onChange="{{ setFilter }}" placeholder="Filtrar por nome, PID ou usuário…" style="width:280px;padding:7px 10px;border-radius:6px;border:1px solid var(--bd,#232B36);background:var(--bg2,#1A2129);color:var(--tx,#E6EBF2);font-size:12px;outline:none">
+            <div style="flex:1"></div>
+            <button onClick="{{ kill }}" style="padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid {{ killBd }};background:transparent;color:{{ killColor }};cursor:{{ killCursor }}">{{ killText }}</button>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;min-height:0;background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:minmax(150px,1.6fr) 80px 90px 110px 120px 140px;gap:10px;padding:0 14px;border-bottom:1px solid var(--bd,#232B36);background:var(--bg2,#1A2129);flex-shrink:0">
+              <sc-for list="{{ cols }}" as="c" hint-placeholder-count="6">
+                <div onClick="{{ c.click }}" style="text-align:{{ c.al }};cursor:pointer;font-size:11px;font-weight:600;color:var(--tx2,#9AA6B5);user-select:none;padding:9px 0;white-space:nowrap">{{ c.label }}{{ c.arrow }}</div>
+              </sc-for>
+            </div>
+            <div style="flex:1;overflow:auto;min-height:0">
+              <sc-for list="{{ procRows }}" as="p" hint-placeholder-count="14">
+                <div onClick="{{ p.select }}" style="display:grid;grid-template-columns:minmax(150px,1.6fr) 80px 90px 110px 120px 140px;gap:10px;align-items:center;padding:5px 14px;border-bottom:1px solid var(--bd,#232B36);cursor:default;background:{{ p.rowBg }}" style-hover="background:var(--bg2,#1A2129)">
+                  <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px">{{ p.name }}</div>
+                  <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--tx2,#9AA6B5)">{{ p.pid }}</div>
+                  <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;color:{{ p.cpuColor }}">{{ p.cpuStr }}</div>
+                  <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px">{{ p.memStr }}</div>
+                  <div style="font-size:12px;color:var(--tx2,#9AA6B5)">{{ p.user }}</div>
+                  <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--tx2,#9AA6B5)"><span style="width:7px;height:7px;border-radius:50%;flex-shrink:0;background:{{ p.stColor }}"></span>{{ p.status }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showPerf }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Performance" style="flex:1;display:flex;flex-direction:column;gap:12px;padding:14px;min-height:0;overflow:auto">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+            <div style="font-size:15px;font-weight:600">Performance</div>
+            <div style="display:inline-flex;gap:2px;background:var(--bg2,#1A2129);border:1px solid var(--bd,#232B36);border-radius:7px;padding:2px">
+              <sc-for list="{{ perfTabs }}" as="t" hint-placeholder-count="4">
+                <div onClick="{{ t.go }}" style="padding:5px 14px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:{{ t.fw }};background:{{ t.bg }};color:{{ t.color }};user-select:none">{{ t.label }}</div>
+              </sc-for>
+            </div>
+          </div>
+
+          <sc-if value="{{ tabCpu }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1;display:grid;grid-template-columns:1.5fr 1fr;gap:12px;min-height:380px">
+              <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:0">
+                <div style="display:flex;align-items:baseline;justify-content:space-between">
+                  <span style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">Uso total da CPU</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:{{ cpuColor }}">{{ cpuNowStr }}</span>
+                </div>
+                <div style="flex:1;min-height:120px">
+                  <svg viewBox="0 0 200 56" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+                    <line x1="0" y1="14" x2="200" y2="14" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <line x1="0" y1="28" x2="200" y2="28" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <line x1="0" y1="42" x2="200" y2="42" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <path d="{{ cpuA }}" fill="rgba(88,166,255,0.13)"></path>
+                    <path d="{{ cpuL }}" fill="none" stroke="#58A6FF" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                  </svg>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border-top:1px solid var(--bd,#232B36);padding-top:12px">
+                  <div style="display:flex;flex-direction:column;gap:2px">
+                    <span style="font-size:10px;letter-spacing:1px;font-weight:600;color:var(--tx3,#5E6B7C)">FREQUÊNCIA</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:500">{{ freqStr }}</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:2px">
+                    <span style="font-size:10px;letter-spacing:1px;font-weight:600;color:var(--tx3,#5E6B7C)">TEMPERATURA</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:500;color:{{ tempColor }}">{{ tempStr }}</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:2px">
+                    <span style="font-size:10px;letter-spacing:1px;font-weight:600;color:var(--tx3,#5E6B7C)">PROCESSOS</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:500">{{ procCount }}</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:2px">
+                    <span style="font-size:10px;letter-spacing:1px;font-weight:600;color:var(--tx3,#5E6B7C)">THREADS</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:500">{{ thrCount }}</span>
+                  </div>
+                </div>
+              </div>
+              <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:11px;min-height:0;overflow:auto">
+                <div style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">Uso por núcleo</div>
+                <sc-for list="{{ coreRows }}" as="c" hint-placeholder-count="8">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span style="width:46px;flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx2,#9AA6B5)">{{ c.label }}</span>
+                    <div style="flex:1;height:8px;border-radius:4px;background:var(--bg3,#232C38);overflow:hidden">
+                      <div style="height:100%;border-radius:4px;width:{{ c.w }};background:{{ c.color }};transition:width 0.4s ease"></div>
+                    </div>
+                    <span style="width:52px;flex-shrink:0;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11px;color:{{ c.color }}">{{ c.pct }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabMem }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1;display:flex;flex-direction:column;gap:12px;min-height:0">
+              <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:200px;flex:1">
+                <div style="display:flex;align-items:baseline;justify-content:space-between">
+                  <span style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">Uso de memória</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--tx2,#9AA6B5)"><span style="color:#BC8CFF;font-weight:600">{{ memNowStr }}</span> · {{ memUsedStr }} de {{ memTotalStr }}</span>
+                </div>
+                <div style="flex:1;min-height:110px">
+                  <svg viewBox="0 0 200 56" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+                    <line x1="0" y1="14" x2="200" y2="14" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <line x1="0" y1="28" x2="200" y2="28" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <line x1="0" y1="42" x2="200" y2="42" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <path d="{{ memA }}" fill="rgba(188,140,255,0.12)"></path>
+                    <path d="{{ memL }}" fill="none" stroke="#BC8CFF" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                  </svg>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;flex-shrink:0">
+                <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:12px">
+                  <div style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">Composição</div>
+                  <div style="display:flex;height:20px;border-radius:5px;overflow:hidden;background:var(--bg3,#232C38)">
+                    <div style="width:{{ memUsedW }};background:#BC8CFF;transition:width 0.4s ease"></div>
+                    <div style="width:{{ memCacheW }};background:#39C5CF;transition:width 0.4s ease"></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:7px;font-size:12px">
+                    <div style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;border-radius:3px;background:#BC8CFF"></span><span style="color:var(--tx2,#9AA6B5);flex:1">Em uso</span><span style="font-family:'IBM Plex Mono',monospace">{{ memUsedStr }}</span></div>
+                    <div style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;border-radius:3px;background:#39C5CF"></span><span style="color:var(--tx2,#9AA6B5);flex:1">Cache e buffers</span><span style="font-family:'IBM Plex Mono',monospace">{{ memCacheStr }}</span></div>
+                    <div style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;border-radius:3px;background:var(--bg3,#232C38)"></span><span style="color:var(--tx2,#9AA6B5);flex:1">Livre</span><span style="font-family:'IBM Plex Mono',monospace">{{ memFreeStr }}</span></div>
+                  </div>
+                </div>
+                <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:12px">
+                  <div style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">Swap</div>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div style="flex:1;height:8px;border-radius:4px;background:var(--bg3,#232C38);overflow:hidden">
+                      <div style="height:100%;border-radius:4px;width:{{ swapW }};background:#D29922;transition:width 0.4s ease"></div>
+                    </div>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx2,#9AA6B5)">{{ swapPctStr }}</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:7px;font-size:12px">
+                    <div style="display:flex;justify-content:space-between"><span style="color:var(--tx2,#9AA6B5)">Swap total</span><span style="font-family:'IBM Plex Mono',monospace">{{ swapTotalStr }}</span></div>
+                    <div style="display:flex;justify-content:space-between"><span style="color:var(--tx2,#9AA6B5)">Swap em uso</span><span style="font-family:'IBM Plex Mono',monospace">{{ swapUsedStr }}</span></div>
+                    <div style="display:flex;justify-content:space-between"><span style="color:var(--tx2,#9AA6B5)">Memória física total</span><span style="font-family:'IBM Plex Mono',monospace">{{ memTotalStr }}</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabDsk }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1;display:flex;flex-direction:column;gap:12px;min-height:0">
+              <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;flex:1;min-height:180px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                  <span style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">E/S de disco</span>
+                  <span style="display:flex;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx2,#9AA6B5)">
+                    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F0883E;margin-right:5px"></span>Leitura {{ ioRStr }}</span>
+                    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#39C5CF;margin-right:5px"></span>Escrita {{ ioWStr }}</span>
+                  </span>
+                </div>
+                <div style="flex:1;min-height:100px">
+                  <svg viewBox="0 0 200 56" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+                    <line x1="0" y1="14" x2="200" y2="14" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <line x1="0" y1="28" x2="200" y2="28" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <line x1="0" y1="42" x2="200" y2="42" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <path d="{{ ioRL }}" fill="none" stroke="#F0883E" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                    <path d="{{ ioWL }}" fill="none" stroke="#39C5CF" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                  </svg>
+                </div>
+              </div>
+              <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:6px 14px;flex-shrink:0">
+                <div style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5);padding:9px 0">Volumes</div>
+                <sc-for list="{{ vols }}" as="v" hint-placeholder-count="3">
+                  <div style="display:grid;grid-template-columns:110px 70px 1fr 170px 52px;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--bd,#232B36)">
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:12px">{{ v.name }}</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--tx2,#9AA6B5)">{{ v.mount }}</span>
+                    <div style="height:8px;border-radius:4px;background:var(--bg3,#232C38);overflow:hidden">
+                      <div style="height:100%;border-radius:4px;width:{{ v.w }};background:{{ v.color }}"></div>
+                    </div>
+                    <span style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--tx2,#9AA6B5)">{{ v.usedStr }} / {{ v.totalStr }}</span>
+                    <span style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:{{ v.color }}">{{ v.pct }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabNet }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1;display:flex;flex-direction:column;gap:12px;min-height:0">
+              <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;flex:1;min-height:180px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                  <span style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">Tráfego em tempo real</span>
+                  <span style="display:flex;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx2,#9AA6B5)">
+                    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#39C5CF;margin-right:5px"></span>Download {{ netDStr }}</span>
+                    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#BC8CFF;margin-right:5px"></span>Upload {{ netUStr }}</span>
+                  </span>
+                </div>
+                <div style="flex:1;min-height:100px">
+                  <svg viewBox="0 0 200 56" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+                    <line x1="0" y1="14" x2="200" y2="14" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <line x1="0" y1="28" x2="200" y2="28" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <line x1="0" y1="42" x2="200" y2="42" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                    <path d="{{ netDA }}" fill="rgba(57,197,207,0.10)"></path>
+                    <path d="{{ netDL }}" fill="none" stroke="#39C5CF" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                    <path d="{{ netUL }}" fill="none" stroke="#BC8CFF" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+                  </svg>
+                </div>
+              </div>
+              <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:6px 14px;flex-shrink:0">
+                <div style="display:grid;grid-template-columns:90px 140px 1fr 1fr 1fr 1fr;gap:12px;padding:9px 0;font-size:11px;font-weight:600;color:var(--tx2,#9AA6B5)">
+                  <span>Interface</span><span>Endereço IPv4</span><span style="text-align:right">Download</span><span style="text-align:right">Upload</span><span style="text-align:right">Total recebido</span><span style="text-align:right">Total enviado</span>
+                </div>
+                <sc-for list="{{ ifRows }}" as="f" hint-placeholder-count="3">
+                  <div style="display:grid;grid-template-columns:90px 140px 1fr 1fr 1fr 1fr;gap:12px;padding:9px 0;border-top:1px solid var(--bd,#232B36);font-family:'IBM Plex Mono',monospace;font-size:12px">
+                    <span>{{ f.name }}</span>
+                    <span style="color:var(--tx2,#9AA6B5)">{{ f.ip }}</span>
+                    <span style="text-align:right;color:#39C5CF">{{ f.dStr }}</span>
+                    <span style="text-align:right;color:#BC8CFF">{{ f.uStr }}</span>
+                    <span style="text-align:right;color:var(--tx2,#9AA6B5)">{{ f.rxStr }}</span>
+                    <span style="text-align:right;color:var(--tx2,#9AA6B5)">{{ f.txStr }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showHist }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Histórico" style="flex:1;display:flex;flex-direction:column;gap:12px;padding:14px;min-height:0;overflow:auto">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:12px;flex-wrap:wrap">
+            <div style="font-size:15px;font-weight:600">Histórico</div>
+            <div style="display:flex;gap:10px">
+              <div style="display:inline-flex;gap:2px;background:var(--bg2,#1A2129);border:1px solid var(--bd,#232B36);border-radius:7px;padding:2px">
+                <sc-for list="{{ histMetricOpts }}" as="o" hint-placeholder-count="3">
+                  <div onClick="{{ o.on }}" style="padding:5px 12px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:{{ o.fw }};background:{{ o.bg }};color:{{ o.color }};user-select:none">{{ o.label }}</div>
+                </sc-for>
+              </div>
+              <div style="display:inline-flex;gap:2px;background:var(--bg2,#1A2129);border:1px solid var(--bd,#232B36);border-radius:7px;padding:2px">
+                <sc-for list="{{ histRangeOpts }}" as="o" hint-placeholder-count="3">
+                  <div onClick="{{ o.on }}" style="padding:5px 12px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:{{ o.fw }};background:{{ o.bg }};color:{{ o.color }};user-select:none">{{ o.label }}</div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+            <div style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">{{ histTitle }}</div>
+            <div style="display:flex;gap:10px;height:210px">
+              <div style="display:flex;flex-direction:column;justify-content:space-between;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--tx3,#5E6B7C);padding:0 0 2px;width:28px;flex-shrink:0">
+                <span>100</span><span>75</span><span>50</span><span>25</span><span>0</span>
+              </div>
+              <svg viewBox="0 0 200 56" preserveAspectRatio="none" style="flex:1;height:100%;display:block">
+                <line x1="0" y1="0.5" x2="200" y2="0.5" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                <line x1="0" y1="14" x2="200" y2="14" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                <line x1="0" y1="28" x2="200" y2="28" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                <line x1="0" y1="42" x2="200" y2="42" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                <line x1="0" y1="55.5" x2="200" y2="55.5" stroke="var(--bd,#232B36)" stroke-width="0.5"></line>
+                <path d="{{ histA }}" fill="{{ histFill }}"></path>
+                <path d="{{ histL }}" fill="none" stroke="{{ histColor }}" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+              </svg>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding-left:38px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--tx3,#5E6B7C)">
+              <sc-for list="{{ histLabels }}" as="lb" hint-placeholder-count="5">
+                <span>{{ lb.t }}</span>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;flex-shrink:0">
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:11px 14px;display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:10px;letter-spacing:1px;font-weight:600;color:var(--tx3,#5E6B7C)">MÉDIA</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600">{{ histAvg }}</span>
+            </div>
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:11px 14px;display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:10px;letter-spacing:1px;font-weight:600;color:var(--tx3,#5E6B7C)">MÁXIMO</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:{{ histMaxColor }}">{{ histMax }}</span>
+            </div>
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:11px 14px;display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:10px;letter-spacing:1px;font-weight:600;color:var(--tx3,#5E6B7C)">MÍNIMO</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600">{{ histMin }}</span>
+            </div>
+          </div>
+          <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:6px 14px;flex-shrink:0">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;padding:9px 0">
+              <span style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5)">Eventos do sistema</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx3,#5E6B7C)">{{ evCount }} eventos</span>
+            </div>
+            <sc-for list="{{ evRows }}" as="e" hint-placeholder-count="8">
+              <div style="display:grid;grid-template-columns:76px 84px 110px 1fr;gap:12px;align-items:center;padding:7px 0;border-top:1px solid var(--bd,#232B36)">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--tx3,#5E6B7C)">{{ e.t }}</span>
+                <span style="justify-self:start;padding:1px 9px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:0.5px;background:{{ e.bBg }};color:{{ e.bColor }}">{{ e.bLabel }}</span>
+                <span style="font-size:12px;color:var(--tx2,#9AA6B5)">{{ e.src }}</span>
+                <span style="font-size:12px">{{ e.msg }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showCfg }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Configurações" style="flex:1;display:flex;flex-direction:column;gap:12px;padding:14px;min-height:0;overflow:auto">
+          <div style="font-size:15px;font-weight:600;flex-shrink:0">Configurações</div>
+          <div style="display:flex;flex-direction:column;gap:12px;max-width:760px">
+
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:4px 16px">
+              <div style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5);padding:12px 0 4px">Aparência</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0 16px">
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <span style="font-size:13px;font-weight:500">Tema</span>
+                  <span style="font-size:11px;color:var(--tx3,#5E6B7C)">Aparência geral da interface</span>
+                </div>
+                <div style="display:inline-flex;gap:2px;background:var(--bg2,#1A2129);border:1px solid var(--bd,#232B36);border-radius:7px;padding:2px">
+                  <sc-for list="{{ themeOpts }}" as="o" hint-placeholder-count="2">
+                    <div onClick="{{ o.on }}" style="padding:5px 14px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:{{ o.fw }};background:{{ o.bg }};color:{{ o.color }};user-select:none">{{ o.label }}</div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:4px 16px">
+              <div style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5);padding:12px 0 4px">Monitoramento</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--bd,#232B36)">
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <span style="font-size:13px;font-weight:500">Intervalo de atualização</span>
+                  <span style="font-size:11px;color:var(--tx3,#5E6B7C)">Frequência de coleta das métricas</span>
+                </div>
+                <div style="display:inline-flex;gap:2px;background:var(--bg2,#1A2129);border:1px solid var(--bd,#232B36);border-radius:7px;padding:2px">
+                  <sc-for list="{{ refreshOpts }}" as="o" hint-placeholder-count="4">
+                    <div onClick="{{ o.on }}" style="padding:5px 12px;border-radius:5px;cursor:pointer;font-size:12px;font-family:'IBM Plex Mono',monospace;font-weight:{{ o.fw }};background:{{ o.bg }};color:{{ o.color }};user-select:none">{{ o.label }}</div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0 16px">
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <span style="font-size:13px;font-weight:500">Unidades de dados</span>
+                  <span style="font-size:11px;color:var(--tx3,#5E6B7C)">Como exibir valores de memória, disco e rede</span>
+                </div>
+                <div style="display:inline-flex;gap:2px;background:var(--bg2,#1A2129);border:1px solid var(--bd,#232B36);border-radius:7px;padding:2px">
+                  <sc-for list="{{ unitOpts }}" as="o" hint-placeholder-count="2">
+                    <div onClick="{{ o.on }}" style="padding:5px 12px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:{{ o.fw }};background:{{ o.bg }};color:{{ o.color }};user-select:none">{{ o.label }}</div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:var(--bg1,#11151C);border:1px solid var(--bd,#232B36);border-radius:8px;padding:4px 16px">
+              <div style="font-size:12px;font-weight:600;color:var(--tx2,#9AA6B5);padding:12px 0 4px">Notificações</div>
+              <sc-for list="{{ toggles }}" as="tg" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--bd,#232B36)">
+                  <div style="display:flex;flex-direction:column;gap:2px">
+                    <span style="font-size:13px;font-weight:500">{{ tg.label }}</span>
+                    <span style="font-size:11px;color:var(--tx3,#5E6B7C)">{{ tg.desc }}</span>
+                  </div>
+                  <div onClick="{{ tg.toggle }}" style="width:36px;height:20px;border-radius:10px;background:{{ tg.bg }};position:relative;cursor:pointer;flex-shrink:0;transition:background 0.15s">
+                    <div style="position:absolute;top:2px;left:{{ tg.knob }};width:16px;height:16px;border-radius:50%;background:#FFFFFF;transition:left 0.15s;box-shadow:0 1px 2px rgba(0,0,0,0.3)"></div>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0 16px">
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <span style="font-size:13px;font-weight:500">Limite de alerta de CPU</span>
+                  <span style="font-size:11px;color:var(--tx3,#5E6B7C)">Gerar evento quando o uso ultrapassar o limite</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;width:260px">
+                  <input type="range" min="50" max="95" step="5" value="{{ cpuThr }}" onChange="{{ setThreshold }}" style="flex:1;accent-color:var(--ac,#58A6FF)">
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;width:38px;text-align:right">{{ cpuThrStr }}</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <div style="height:26px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 12px;background:var(--bg1,#11151C);border-top:1px solid var(--bd,#232B36);font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx2,#9AA6B5)">
+    <span>CPU <span style="color:{{ cpuColor }}">{{ cpuNowStr }}</span></span>
+    <span>MEM <span style="color:#BC8CFF">{{ memNowStr }}</span></span>
+    <span>↓ {{ netDStr }}</span>
+    <span>↑ {{ netUStr }}</span>
+    <span style="flex:1"></span>
+    <span>{{ procCount }} processos</span>
+    <span>atualização {{ refreshLabel }}</span>
+  </div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  HIST = 80;
+  TOTAL_MEM = 34359738368;
+  TOTAL_SWAP = 8589934592;
+
+  constructor(props) {
+    super(props);
+    const seed = (v, amt, min, max) => { const a = []; let x = v; for (let i = 0; i < this.HIST; i++) { x = this.wk(x, amt, min, max); a.push(x); } return a; };
+    this.state = {
+      view: 'dash', perfTab: 'cpu', theme: 'dark', refreshMs: 1000, units: 'binary',
+      alertCpu: true, alertMem: true, alertTemp: false, cpuThr: 85,
+      cpu: 34, cores: [30, 44, 25, 56, 33, 28, 47, 38], memPct: 56, swapPct: 14,
+      temp: 52, freq: 3.4, up: 1119274, load1: 1.42, load5: 1.31, load15: 1.18,
+      cpuHist: seed(34, 10, 2, 98), memHist: seed(56, 2.5, 25, 92),
+      ioR: 42e6, ioW: 18e6, ioRHist: seed(42e6, 20e6, 0, 260e6), ioWHist: seed(18e6, 10e6, 0, 140e6),
+      netD: 2.4e6, netU: 0.4e6, netDHist: seed(2.4e6, 1.4e6, 2e4, 9e6), netUHist: seed(0.4e6, 0.25e6, 8e3, 2.5e6),
+      procs: this.makeProcs(), sortKey: 'cpu', sortDir: -1, filter: '', selPid: null,
+      events: this.seedEvents(), histRange: 'h1', histMetric: 'cpu',
+      ifaces: [
+        { name: 'eth0', ip: '192.168.15.4', d: 2.2e6, u: 0.38e6, rxT: 84.2e9, txT: 12.6e9 },
+        { name: 'wlan0', ip: '192.168.15.7', d: 0.11e6, u: 0.025e6, rxT: 6.4e9, txT: 1.1e9 },
+        { name: 'lo', ip: '127.0.0.1', d: 4e4, u: 4e4, rxT: 0.92e9, txT: 0.92e9 },
+      ],
+    };
+    this.long = this.genLong();
+  }
+
+  wk(v, amt, min, max) { return Math.min(max, Math.max(min, v + (Math.random() - 0.5) * amt)); }
+
+  makeProcs() {
+    const defs = [
+      ['chrome', 'lucas', 18, 1480, 42], ['chrome --renderer', 'lucas', 11, 820, 18],
+      ['code', 'lucas', 9, 960, 31], ['code --extension-host', 'lucas', 5, 480, 14],
+      ['node server.js', 'lucas', 14, 310, 11], ['python3 train.py', 'lucas', 38, 2200, 6],
+      ['postgres', 'postgres', 4, 420, 8], ['redis-server', 'redis', 1.5, 96, 4],
+      ['mysqld', 'mysql', 3.2, 460, 29], ['dockerd', 'root', 2.5, 180, 22],
+      ['containerd', 'root', 1, 88, 14], ['nginx', 'www-data', 1.2, 24, 5],
+      ['firefox', 'lucas', 7, 1120, 38], ['spotify', 'lucas', 3, 380, 17],
+      ['slack', 'lucas', 4, 540, 24], ['gnome-shell', 'lucas', 5, 310, 13],
+      ['Xorg', 'root', 3, 140, 7], ['pulseaudio', 'lucas', 1, 36, 5],
+      ['systemd', 'root', 0.4, 12, 1], ['systemd-journald', 'root', 0.5, 42, 1],
+      ['kworker/u16:2', 'root', 0.8, 3, 1], ['sshd', 'root', 0.2, 9, 1],
+      ['bash', 'lucas', 0.1, 5, 1], ['htop', 'lucas', 1.4, 8, 1],
+      ['cupsd', 'root', 0.1, 14, 3],
+    ];
+    return defs.map((d, i) => ({
+      name: d[0], user: d[1], base: d[2], cpu: d[2], memB: d[3] * 1048576, thr: d[4],
+      pid: d[0] === 'systemd' ? 1 : 300 + ((i * 1117) % 28000),
+      st: d[0] === 'cupsd' ? 'stop' : (i % 6 === 4 ? 'sleep' : 'run'),
+    }));
+  }
+
+  seedEvents() {
+    return [
+      { t: '09:58:12', sev: 'info', src: 'Sistema', msg: 'Serviço dockerd reiniciado com sucesso' },
+      { t: '09:41:55', sev: 'warn', src: 'CPU', msg: 'Uso de CPU atingiu 88% (limite 85%)' },
+      { t: '09:40:31', sev: 'crit', src: 'Memória', msg: 'Memória disponível abaixo de 8% por 30 s' },
+      { t: '09:12:04', sev: 'info', src: 'Rede', msg: 'Interface wlan0 conectada (192.168.15.7)' },
+      { t: '08:57:46', sev: 'warn', src: 'Temperatura', msg: 'CPU atingiu 81 °C durante compilação' },
+      { t: '08:30:18', sev: 'info', src: 'Processos', msg: 'python3 train.py iniciado por lucas (PID 18412)' },
+      { t: '08:02:09', sev: 'info', src: 'Sistema', msg: 'Atualizações de segurança aplicadas (4 pacotes)' },
+      { t: '07:45:00', sev: 'info', src: 'Sistema', msg: 'Sessão iniciada para o usuário lucas' },
+      { t: '07:44:21', sev: 'info', src: 'Sistema', msg: 'Inicialização concluída em 9,8 s' },
+    ];
+  }
+
+  genLong() {
+    const nz = a => (Math.random() - 0.5) * a;
+    const mk = (n, f) => Array.from({ length: n }, (_, i) => Math.max(1, Math.min(99, f(i / (n - 1)) + nz(9))));
+    return {
+      h1: {
+        cpu: mk(72, t => 30 + 20 * Math.sin(t * 9) + 28 * Math.exp(-Math.pow((t - 0.7) / 0.06, 2))),
+        mem: mk(72, t => 52 + 8 * Math.sin(t * 5)),
+        net: mk(72, t => 18 + 14 * Math.sin(t * 13)),
+      },
+      d1: {
+        cpu: mk(96, t => 16 + 52 * Math.exp(-Math.pow((t - 0.58) / 0.16, 2)) + 24 * Math.exp(-Math.pow((t - 0.35) / 0.07, 2))),
+        mem: mk(96, t => 38 + 26 * t),
+        net: mk(96, t => 10 + 38 * Math.exp(-Math.pow((t - 0.55) / 0.2, 2))),
+      },
+      w1: {
+        cpu: mk(84, t => (Math.floor(t * 6.99) >= 5 ? 12 : 34) + 16 * Math.sin(t * 44)),
+        mem: mk(84, t => 45 + 10 * Math.sin(t * 22)),
+        net: mk(84, t => 15 + 12 * Math.sin(t * 30)),
+      },
+    };
+  }
+
+  componentDidMount() {
+    try {
+      const p = JSON.parse(localStorage.getItem('sysmon_prefs') || 'null');
+      if (p && typeof p === 'object') this.setState(p, () => this.start());
+      else this.start();
+    } catch (e) { this.start(); }
+  }
+
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  start() { clearInterval(this.timer); this.timer = setInterval(() => this.tick(), this.state.refreshMs); }
+
+  savePrefs() {
+    const s = this.state;
+    try {
+      localStorage.setItem('sysmon_prefs', JSON.stringify({
+        theme: s.theme, refreshMs: s.refreshMs, units: s.units,
+        alertCpu: s.alertCpu, alertMem: s.alertMem, alertTemp: s.alertTemp, cpuThr: s.cpuThr,
+      }));
+    } catch (e) {}
+  }
+
+  setPref(patch) { this.setState(patch, () => { this.savePrefs(); if ('refreshMs' in patch) this.start(); }); }
+
+  tick() {
+    this.setState(s => {
+      const spike = Math.random() < 0.04 ? 25 : 0;
+      const cpu = this.wk(s.cpu + spike, 11, 2, 98);
+      const cores = s.cores.map(c => Math.max(1, Math.min(100, c * 0.35 + cpu * 0.65 + (Math.random() - 0.5) * 34)));
+      const memPct = this.wk(s.memPct, 2.2, 22, 94);
+      const swapPct = this.wk(s.swapPct, 1.2, 0, 60);
+      const ioR = this.wk(s.ioR, 28e6, 0, 320e6), ioW = this.wk(s.ioW, 13e6, 0, 180e6);
+      const burst = Math.random() < 0.06 ? 4e6 : 0;
+      const netD = this.wk(s.netD + burst, 1.3e6, 2e4, 11e6), netU = this.wk(s.netU, 0.3e6, 8e3, 3e6);
+      const temp = Math.max(32, Math.min(96, 34 + cpu * 0.42 + (Math.random() - 0.5) * 3));
+      const push = (h, v) => h.concat(v).slice(-this.HIST);
+      const procs = s.procs.map(p => ({
+        ...p,
+        cpu: Math.max(0, Math.min(99, p.base + (Math.random() - 0.5) * (p.base * 1.6 + 1.5))),
+        memB: Math.max(2e6, p.memB * (1 + (Math.random() - 0.5) * 0.02)),
+      }));
+      let events = s.events;
+      const now = new Date().toLocaleTimeString('pt-BR');
+      if (s.alertCpu && cpu >= s.cpuThr && s.cpu < s.cpuThr) events = [{ t: now, sev: cpu > 95 ? 'crit' : 'warn', src: 'CPU', msg: 'Uso de CPU atingiu ' + cpu.toFixed(0) + '% (limite ' + s.cpuThr + '%)' }].concat(events).slice(0, 120);
+      if (s.alertMem && memPct >= 90 && s.memPct < 90) events = [{ t: now, sev: 'warn', src: 'Memória', msg: 'Uso de memória atingiu ' + memPct.toFixed(0) + '%' }].concat(events).slice(0, 120);
+      if (s.alertTemp && temp >= 80 && s.temp < 80) events = [{ t: now, sev: 'warn', src: 'Temperatura', msg: 'Temperatura da CPU atingiu ' + temp.toFixed(0) + ' °C' }].concat(events).slice(0, 120);
+      const ifaces = s.ifaces.map((f, i) => {
+        const d = i === 0 ? netD * 0.92 : i === 1 ? netD * 0.05 : 4e4;
+        const u = i === 0 ? netU * 0.9 : i === 1 ? netU * 0.07 : 4e4;
+        return { ...f, d, u, rxT: f.rxT + d * s.refreshMs / 1000, txT: f.txT + u * s.refreshMs / 1000 };
+      });
+      return {
+        cpu, cores, memPct, swapPct, ioR, ioW, netD, netU, temp, procs, events, ifaces,
+        freq: this.wk(s.freq, 0.5, 1.2, 4.7), up: s.up + s.refreshMs / 1000,
+        load1: this.wk(s.load1, 0.3, 0.1, 8),
+        load5: s.load5 + (s.load1 - s.load5) * 0.12,
+        load15: s.load15 + (s.load5 - s.load15) * 0.08,
+        cpuHist: push(s.cpuHist, cpu), memHist: push(s.memHist, memPct),
+        ioRHist: push(s.ioRHist, ioR), ioWHist: push(s.ioWHist, ioW),
+        netDHist: push(s.netDHist, netD), netUHist: push(s.netUHist, netU),
+      };
+    });
+  }
+
+  line(hist, max, w, h) {
+    const n = hist.length;
+    if (n < 2) return { l: '', a: '' };
+    const pts = hist.map((v, i) => ((i / (n - 1)) * w).toFixed(1) + ',' + (h - 2 - (Math.min(v, max) / max) * (h - 6)).toFixed(1));
+    const l = 'M' + pts.join(' L');
+    return { l, a: l + ' L' + w + ',' + h + ' L0,' + h + ' Z' };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const dark = s.theme === 'dark';
+    const C = dark
+      ? { bg0: '#0B0E13', bg1: '#11151C', bg2: '#1A2129', bg3: '#232C38', bd: '#232B36', tx: '#E6EBF2', tx2: '#9AA6B5', tx3: '#5E6B7C', ac: '#58A6FF' }
+      : { bg0: '#EEF1F5', bg1: '#FFFFFF', bg2: '#E9EDF2', bg3: '#DCE3EB', bd: '#D5DCE5', tx: '#16202C', tx2: '#53616F', tx3: '#8895A4', ac: '#0969DA' };
+    const OK = '#3FB950', WARN = '#D29922', CRIT = '#F85149';
+    const lvl = p => p >= 85 ? CRIT : p >= 60 ? WARN : OK;
+    const acBg = dark ? 'rgba(88,166,255,0.13)' : 'rgba(9,105,218,0.10)';
+    const rootStyle = { '--bg0': C.bg0, '--bg1': C.bg1, '--bg2': C.bg2, '--bg3': C.bg3, '--bd': C.bd, '--tx': C.tx, '--tx2': C.tx2, '--tx3': C.tx3, '--ac': C.ac };
+
+    const k = s.units === 'binary' ? 1024 : 1000;
+    const U = s.units === 'binary' ? ['B', 'KiB', 'MiB', 'GiB', 'TiB'] : ['B', 'kB', 'MB', 'GB', 'TB'];
+    const fmtB = b => { let v = b, i = 0; while (v >= k && i < 4) { v /= k; i++; } return (v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v.toFixed(2)).replace('.', ',') + ' ' + U[i]; };
+    const fmtS = b => fmtB(b) + '/s';
+    const pf = v => v.toFixed(1).replace('.', ',');
+
+    const d = Math.floor(s.up / 86400), hh = Math.floor((s.up % 86400) / 3600), mm = Math.floor((s.up % 3600) / 60);
+    const upStr = d + 'd ' + hh + 'h ' + mm + 'min';
+
+    const navDefs = [
+      ['dash', 'Dashboard', 'M3.5 18.5a9 9 0 1 1 17 0', 'M12 14l4-4'],
+      ['proc', 'Processos', 'M8 6h13M8 12h13M8 18h13', 'M3.5 6h.01M3.5 12h.01M3.5 18h.01'],
+      ['perf', 'Performance', 'M22 12h-4l-3 9L9 3l-3 9H2', ''],
+      ['hist', 'Histórico', 'M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18', 'M12 7v5l3.5 2'],
+      ['cfg', 'Configurações', 'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3', 'M2 14h4M10 8h4M18 16h4'],
+    ];
+    const navItems = navDefs.map(nd => ({
+      label: nd[1], icon: nd[2], icon2: nd[3],
+      go: () => this.setState({ view: nd[0] }),
+      bg: s.view === nd[0] ? acBg : 'transparent',
+      color: s.view === nd[0] ? C.ac : C.tx2,
+      fw: s.view === nd[0] ? 600 : 400,
+    }));
+
+    const seg = (opts, cur, fn) => opts.map(o => ({
+      label: o[1], on: () => fn(o[0]),
+      bg: cur === o[0] ? C.bg3 : 'transparent',
+      color: cur === o[0] ? C.tx : C.tx2,
+      fw: cur === o[0] ? 600 : 400,
+    }));
+
+    const perfTabs = seg([['cpu', 'CPU'], ['mem', 'Memória'], ['dsk', 'Disco'], ['net', 'Rede']], s.perfTab, v => this.setState({ perfTab: v }))
+      .map(t => ({ ...t, go: t.on }));
+    const themeOpts = seg([['dark', 'Escuro'], ['light', 'Claro']], s.theme, v => this.setPref({ theme: v }));
+    const refreshOpts = seg([[500, '0,5 s'], [1000, '1 s'], [2000, '2 s'], [5000, '5 s']], s.refreshMs, v => this.setPref({ refreshMs: v }));
+    const unitOpts = seg([['binary', 'Binárias (GiB)'], ['decimal', 'Decimais (GB)']], s.units, v => this.setPref({ units: v }));
+    const histRangeOpts = seg([['h1', 'Última hora'], ['d1', '24 horas'], ['w1', '7 dias']], s.histRange, v => this.setState({ histRange: v }));
+    const histMetricOpts = seg([['cpu', 'CPU'], ['mem', 'Memória'], ['net', 'Rede']], s.histMetric, v => this.setState({ histMetric: v }));
+
+    const toggles = [
+      { label: 'Alertas de CPU', desc: 'Notificar quando o uso ultrapassar o limite', key: 'alertCpu' },
+      { label: 'Alertas de memória', desc: 'Notificar quando o uso ultrapassar 90%', key: 'alertMem' },
+      { label: 'Alertas de temperatura', desc: 'Notificar acima de 80 °C', key: 'alertTemp' },
+    ].map(t => ({
+      label: t.label, desc: t.desc,
+      bg: s[t.key] ? C.ac : C.bg3,
+      knob: s[t.key] ? '18px' : '2px',
+      toggle: () => this.setPref({ [t.key]: !s[t.key] }),
+    }));
+
+    const term = s.filter.trim().toLowerCase();
+    let list = s.procs.filter(p => !term || p.name.toLowerCase().includes(term) || String(p.pid).includes(term) || p.user.includes(term));
+    list = [...list].sort((a, b) => {
+      const va = a[s.sortKey], vb = b[s.sortKey];
+      return (typeof va === 'string' ? va.localeCompare(vb) : va - vb) * s.sortDir;
+    });
+    const stMap = { run: ['Em execução', OK], sleep: ['Inativo', C.tx3], stop: ['Suspenso', WARN] };
+    const procRows = list.map(p => ({
+      ...p,
+      select: () => this.setState(st => ({ selPid: st.selPid === p.pid ? null : p.pid })),
+      rowBg: s.selPid === p.pid ? acBg : 'transparent',
+      cpuStr: pf(p.cpu) + '%',
+      cpuColor: p.cpu >= 50 ? CRIT : p.cpu >= 25 ? WARN : C.tx,
+      memStr: fmtB(p.memB),
+      status: stMap[p.st][0], stColor: stMap[p.st][1],
+    }));
+    const colDefs = [['name', 'Nome', 'left'], ['pid', 'PID', 'right'], ['cpu', 'CPU', 'right'], ['memB', 'Memória', 'right'], ['user', 'Usuário', 'left'], ['st', 'Status', 'left']];
+    const cols = colDefs.map(cd => ({
+      label: cd[1], al: cd[2],
+      arrow: s.sortKey === cd[0] ? (s.sortDir < 0 ? ' ▼' : ' ▲') : '',
+      click: () => this.setState(st => ({
+        sortKey: cd[0],
+        sortDir: st.sortKey === cd[0] ? -st.sortDir : (cd[0] === 'name' || cd[0] === 'user' || cd[0] === 'st' ? 1 : -1),
+      })),
+    }));
+    const sel = s.procs.find(p => p.pid === s.selPid);
+    const kill = sel ? () => this.setState(st => {
+      const p = st.procs.find(x => x.pid === st.selPid);
+      if (!p) return null;
+      return {
+        procs: st.procs.filter(x => x.pid !== st.selPid), selPid: null,
+        events: [{ t: new Date().toLocaleTimeString('pt-BR'), sev: 'info', src: 'Processos', msg: 'Processo ' + p.name + ' (PID ' + p.pid + ') finalizado pelo usuário' }].concat(st.events),
+      };
+    }) : () => {};
+
+    const cpuC = this.line(s.cpuHist, 100, 200, 56);
+    const memC = this.line(s.memHist, 100, 200, 56);
+    const ioMax = Math.max(60e6, Math.max(...s.ioRHist), Math.max(...s.ioWHist)) * 1.15;
+    const ioRC = this.line(s.ioRHist, ioMax, 200, 56);
+    const ioWC = this.line(s.ioWHist, ioMax, 200, 56);
+    const netMax = Math.max(2e6, Math.max(...s.netDHist), Math.max(...s.netUHist)) * 1.15;
+    const netDC = this.line(s.netDHist, netMax, 200, 56);
+    const netUC = this.line(s.netUHist, netMax, 200, 56);
+
+    const coreRows = s.cores.map((v, i) => ({ label: 'CPU ' + i, w: Math.round(v) + '%', pct: pf(v) + '%', color: lvl(v) }));
+
+    const cachePct = Math.min(100 - s.memPct, 23);
+    const memUsedB = s.memPct / 100 * this.TOTAL_MEM;
+    const memCacheB = cachePct / 100 * this.TOTAL_MEM;
+    const memFreeB = this.TOTAL_MEM - memUsedB - memCacheB;
+
+    const vols = [
+      { name: 'nvme0n1p2', mount: '/', total: 512e9, used: 348e9 },
+      { name: 'nvme0n1p3', mount: '/home', total: 1e12, used: 412e9 },
+      { name: 'sda1', mount: '/data', total: 4e12, used: 3.55e12 },
+    ].map(v => {
+      const pct = v.used / v.total * 100;
+      return { name: v.name, mount: v.mount, pct: Math.round(pct) + '%', w: pct.toFixed(1) + '%', color: lvl(pct), usedStr: fmtB(v.used), totalStr: fmtB(v.total) };
+    });
+
+    const ifRows = s.ifaces.map(f => ({ name: f.name, ip: f.ip, dStr: fmtS(f.d), uStr: fmtS(f.u), rxStr: fmtB(f.rxT), txStr: fmtB(f.txT) }));
+
+    const series = this.long[s.histRange][s.histMetric];
+    const histC = this.line(series, 100, 200, 56);
+    const histColor = { cpu: '#58A6FF', mem: '#BC8CFF', net: '#39C5CF' }[s.histMetric];
+    const histFill = { cpu: 'rgba(88,166,255,0.13)', mem: 'rgba(188,140,255,0.12)', net: 'rgba(57,197,207,0.10)' }[s.histMetric];
+    const histUnit = s.histMetric === 'net' ? ' Mb/s' : '%';
+    const histTitle = { cpu: 'Uso de CPU (%)', mem: 'Uso de memória (%)', net: 'Tráfego de rede (Mb/s)' }[s.histMetric] + ' — ' + { h1: 'última hora', d1: 'últimas 24 horas', w1: 'última semana' }[s.histRange];
+    const avg = series.reduce((a, b) => a + b, 0) / series.length;
+    const mx = Math.max(...series), mn = Math.min(...series);
+    const histLabels = ({
+      h1: ['-60 min', '-45 min', '-30 min', '-15 min', 'agora'],
+      d1: ['00:00', '06:00', '12:00', '18:00', 'agora'],
+      w1: ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'],
+    })[s.histRange].map(t => ({ t }));
+
+    const evBadge = {
+      info: [C.tx2, dark ? 'rgba(154,166,181,0.12)' : 'rgba(83,97,111,0.10)', 'INFO'],
+      warn: [WARN, 'rgba(210,153,34,0.14)', 'ALERTA'],
+      crit: [CRIT, 'rgba(248,81,73,0.14)', 'CRÍTICO'],
+    };
+    const evRows = s.events.slice(0, 60).map(e => ({ ...e, bColor: evBadge[e.sev][0], bBg: evBadge[e.sev][1], bLabel: evBadge[e.sev][2] }));
+
+    const liveDot = React.createElement('span', { style: { width: 7, height: 7, borderRadius: '50%', background: OK, display: 'inline-block', animation: 'pulse 2s ease-in-out infinite' } });
+
+    return {
+      rootStyle, liveDot, navItems,
+      showDash: s.view === 'dash', showProc: s.view === 'proc', showPerf: s.view === 'perf', showHist: s.view === 'hist', showCfg: s.view === 'cfg',
+      tabCpu: s.perfTab === 'cpu', tabMem: s.perfTab === 'mem', tabDsk: s.perfTab === 'dsk', tabNet: s.perfTab === 'net',
+      perfTabs, themeOpts, refreshOpts, unitOpts, histRangeOpts, histMetricOpts, toggles,
+      refreshLabel: ({ 500: '0,5 s', 1000: '1 s', 2000: '2 s', 5000: '5 s' })[s.refreshMs],
+      upStr,
+      tempStr: Math.round(s.temp) + ' °C', tempColor: s.temp >= 80 ? CRIT : s.temp >= 65 ? WARN : OK,
+      procCount: s.procs.length, procShown: procRows.length,
+      thrCount: s.procs.reduce((a, p) => a + p.thr, 0),
+      load1Str: s.load1.toFixed(2).replace('.', ','),
+      loadSub: s.load5.toFixed(2).replace('.', ',') + ' · ' + s.load15.toFixed(2).replace('.', ',') + ' (5/15 min)',
+      cpuNowStr: pf(s.cpu) + '%', cpuColor: lvl(s.cpu),
+      memNowStr: pf(s.memPct) + '%',
+      cpuL: cpuC.l, cpuA: cpuC.a, memL: memC.l, memA: memC.a,
+      ioRL: ioRC.l, ioWL: ioWC.l, netDL: netDC.l, netDA: netDC.a, netUL: netUC.l,
+      ioRStr: fmtS(s.ioR), ioWStr: fmtS(s.ioW), netDStr: fmtS(s.netD), netUStr: fmtS(s.netU),
+      freqStr: s.freq.toFixed(2).replace('.', ',') + ' GHz',
+      coreRows,
+      memUsedStr: fmtB(memUsedB), memCacheStr: fmtB(memCacheB), memFreeStr: fmtB(memFreeB), memTotalStr: fmtB(this.TOTAL_MEM),
+      memUsedW: s.memPct.toFixed(1) + '%', memCacheW: cachePct.toFixed(1) + '%',
+      swapW: s.swapPct.toFixed(1) + '%', swapPctStr: pf(s.swapPct) + '%',
+      swapTotalStr: fmtB(this.TOTAL_SWAP), swapUsedStr: fmtB(s.swapPct / 100 * this.TOTAL_SWAP),
+      vols, ifRows,
+      filter: s.filter, setFilter: e => this.setState({ filter: e.target.value }),
+      procRows, cols, kill,
+      killText: sel ? 'Finalizar "' + sel.name + '" (PID ' + sel.pid + ')' : 'Finalizar processo',
+      killBd: sel ? CRIT : C.bd, killColor: sel ? CRIT : C.tx3, killCursor: sel ? 'pointer' : 'default',
+      histL: histC.l, histA: histC.a, histColor, histFill, histTitle, histLabels,
+      histAvg: pf(avg) + histUnit, histMax: pf(mx) + histUnit, histMin: pf(mn) + histUnit,
+      histMaxColor: s.histMetric === 'net' ? C.tx : lvl(mx),
+      evRows, evCount: s.events.length,
+      cpuThr: s.cpuThr, cpuThrStr: s.cpuThr + '%',
+      setThreshold: e => this.setPref({ cpuThr: +e.target.value }),
+    };
+  }
+}
+</script>
+</body>
+</html>

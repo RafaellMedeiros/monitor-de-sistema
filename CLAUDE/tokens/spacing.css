@@ -1,0 +1,42 @@
+/* ============================================================
+   SPACING, RADII, BORDERS, SHADOW, MOTION
+   High-density desktop rhythm: tight, even, panel-based.
+   ============================================================ */
+
+:root {
+  /* Spacing scale — drives padding & fl/grid gaps */
+  --space-1:  2px;
+  --space-2:  4px;
+  --space-3:  7px;
+  --space-4:  8px;
+  --space-5:  10px;
+  --space-6:  12px;   /* default panel gap */
+  --space-7:  14px;   /* default panel padding */
+  --space-8:  16px;
+
+  /* Corner radii */
+  --radius-xs:  4px;   /* progress tracks, swatch chips */
+  --radius-sm:  5px;   /* segmented-control segments */
+  --radius-md:  6px;   /* buttons, inputs, nav items */
+  --radius-lg:  7px;   /* segmented-control shell */
+  --radius-xl:  8px;   /* panels / cards */
+  --radius-pill: 999px;
+
+  /* Borders */
+  --border-hair: 1px solid var(--border);
+
+  /* Control sizing */
+  --control-h:   32px;  /* buttons / inputs */
+  --titlebar-h:  38px;
+  --statusbar-h: 26px;
+  --sidebar-w:   192px;
+
+  /* Elevation — panels are flat with hairline borders; this is for
+     floating surfaces only (menus, dialogs, tooltips). */
+  --shadow-pop: 0 8px 28px rgba(0, 0, 0, 0.45);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 0.15s;   /* control state changes */
+  --dur-bar:  0.4s;    /* meter / bar width transitions */
+}

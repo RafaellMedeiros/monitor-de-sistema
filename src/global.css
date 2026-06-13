@@ -1,0 +1,135 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* body {
+    width: 100vw;
+    height: 100vh;
+} */
+
+:root {
+    --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    /* ---- Base palette (raw, theme-agnostic) ---- */
+
+    /* Signal / accent hues — also the chart series colors */
+    --blue-500: #58A6FF;
+    /* primary accent (dark), CPU series */
+    --blue-600: #0969DA;
+    /* primary accent (light) */
+    --purple-400: #BC8CFF;
+    /* memory series */
+    --cyan-400: #39C5CF;
+    /* network / disk-write series */
+    --orange-400: #F0883E;
+    /* disk-read series */
+
+    /* Status hues — usage levels normal / attention / critical */
+    --green-500: #3FB950;
+    /* OK   — normal */
+    --amber-500: #D29922;
+    /* WARN — attention */
+    --red-500: #F85149;
+    /* CRIT — critical */
+
+    /* Traffic-light dots (window chrome) */
+    --traffic-red: #FF5F57;
+    --traffic-yellow: #FEBC2E;
+    --traffic-green: #28C840;
+
+    /* Dark neutrals — near-black blues, low chroma */
+    --ink-950: #0B0E13;
+    /* app background, deepest */
+    --ink-900: #11151C;
+    /* surface / panels */
+    --ink-850: #1A2129;
+    /* raised / hover / inset controls */
+    --ink-800: #232C38;
+    /* track / fill base */
+    --ink-line: #232B36;
+    /* hairline borders */
+    --ink-100: #E6EBF2;
+    /* primary text */
+    --ink-400: #9AA6B5;
+    /* secondary text */
+    --ink-500: #5E6B7C;
+    /* tertiary / muted text */
+
+    /* Light neutrals */
+    --paper-050: #EEF1F5;
+    /* app background */
+    --paper-000: #FFFFFF;
+    /* surface / panels */
+    --paper-100: #E9EDF2;
+    /* raised / inset controls */
+    --paper-200: #DCE3EB;
+    /* track / fill base */
+    --paper-line: #D5DCE5;
+    --paper-900: #16202C;
+    /* primary text */
+    --paper-600: #53616F;
+    /* secondary text */
+    --paper-500: #8895A4;
+    /* tertiary text */
+
+    /* ============================================================
+     SEMANTIC ALIASES — DARK (default)
+     Always reference these in product UI, never the raw palette.
+     ============================================================ */
+    --bg-app: var(--ink-950);
+    --bg-surface: var(--ink-900);
+    --bg-raised: var(--ink-850);
+    --bg-track: var(--ink-800);
+    --border: var(--ink-line);
+
+    --text-primary: var(--ink-100);
+    --text-secondary: var(--ink-400);
+    --text-tertiary: var(--ink-500);
+
+    --accent: var(--blue-500);
+    --accent-soft: rgba(88, 166, 255, 0.13);
+
+    --status-ok: var(--green-500);
+    --status-warn: var(--amber-500);
+    --status-crit: var(--red-500);
+
+    /* Soft status fills (badges, row highlights) */
+    --status-ok-soft: rgba(63, 185, 80, 0.14);
+    --status-warn-soft: rgba(210, 153, 34, 0.14);
+    --status-crit-soft: rgba(248, 81, 73, 0.14);
+    --neutral-soft: rgba(154, 166, 181, 0.12);
+
+    /* Chart series + their area fills */
+    --chart-cpu: var(--blue-500);
+    --chart-mem: var(--purple-400);
+    --chart-disk: var(--orange-400);
+    --chart-net: var(--cyan-400);
+    --chart-cpu-fill: rgba(88, 166, 255, 0.13);
+    --chart-mem-fill: rgba(188, 140, 255, 0.12);
+    --chart-net-fill: rgba(57, 197, 207, 0.10);
+}
+
+/* ============================================================
+   SEMANTIC ALIASES — LIGHT
+   ============================================================ */
+[data-theme="light"] {
+    --bg-app: var(--paper-050);
+    --bg-surface: var(--paper-000);
+    --bg-raised: var(--paper-100);
+    --bg-track: var(--paper-200);
+    --border: var(--paper-line);
+
+    --text-primary: var(--paper-900);
+    --text-secondary: var(--paper-600);
+    --text-tertiary: var(--paper-500);
+
+    --accent: var(--blue-600);
+    --accent-soft: rgba(9, 105, 218, 0.10);
+
+    --neutral-soft: rgba(83, 97, 111, 0.10);
+}

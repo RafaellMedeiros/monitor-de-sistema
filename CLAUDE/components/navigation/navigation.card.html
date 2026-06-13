@@ -1,0 +1,44 @@
+<!-- @dsCard group="Components" viewport="700x250" name="Navigation" subtitle="NavItem — fixed sidebar rows" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; background: var(--bg-app); font-family: var(--font-sans); color: var(--text-primary); padding: 20px; }
+  .sidebar { width: 200px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 10px 8px; display: flex; flex-direction: column; gap: 2px; }
+  .eyebrow { font-size: 10px; letter-spacing: 1.4px; font-weight: 600; color: var(--text-tertiary); padding: 4px 10px 8px; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" data-presets="react">
+    function pick(name){ for (const k of Object.keys(window)){ let v; try { v=window[k]; } catch(e){ continue; } if(v&&typeof v==='object'&&typeof v[name]==='function') return v[name]; } return () => null; }
+    const NavItem = pick('NavItem');
+    const Icon = ({d,d2}) => (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={d}/>{d2&&<path d={d2}/>}</svg>);
+    const items = [
+      {k:'dash',label:'Dashboard',d:'M3.5 18.5a9 9 0 1 1 17 0',d2:'M12 14l4-4'},
+      {k:'proc',label:'Processos',d:'M8 6h13M8 12h13M8 18h13',d2:'M3.5 6h.01M3.5 12h.01M3.5 18h.01'},
+      {k:'perf',label:'Performance',d:'M22 12h-4l-3 9L9 3l-3 9H2'},
+      {k:'hist',label:'Histórico',d:'M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18',d2:'M12 7v5l3.5 2'},
+      {k:'cfg',label:'Configurações',d:'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3',d2:'M2 14h4M10 8h4M18 16h4'},
+    ];
+    function Demo(){
+      const [active,setActive]=React.useState('dash');
+      return (
+        <div className="sidebar">
+          <div className="eyebrow">SISTEMA</div>
+          {items.map(it=>(
+            <NavItem key={it.k} label={it.label} active={active===it.k} onClick={()=>setActive(it.k)} icon={<Icon d={it.d} d2={it.d2}/>} />
+          ))}
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+  </script>
+</body>
+</html>

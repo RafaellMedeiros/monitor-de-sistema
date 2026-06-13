@@ -1,0 +1,36 @@
+/* ============================================================
+   TYPOGRAPHY
+   Two families, strict division of labor:
+   - IBM Plex Sans  → labels, headings, prose, controls
+   - IBM Plex Mono  → every number, metric, PID, byte count, axis
+   Monospace for data keeps columns aligned and reads as
+   "instrument output", not marketing copy.
+   ============================================================ */
+
+:root {
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Type scale (px) — compact desktop densities */
+  --text-micro:  10px;  /* section eyebrows, axis ticks (UPPERCASE) */
+  --text-2xs:    11px;  /* status bar, table meta, captions */
+  --text-xs:     12px;  /* controls, table cells, secondary labels */
+  --text-sm:     13px;  /* default body, nav items */
+  --text-md:     15px;  /* view titles */
+  --text-lg:     17px;  /* summary stats */
+  --text-xl:     22px;  /* hero metric readouts */
+
+  /* Weights */
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  /* Eyebrow / label treatment */
+  --eyebrow-spacing: 1px;     /* letter-spacing for micro UPPERCASE labels */
+  --eyebrow-spacing-wide: 1.4px;
+
+  --leading-tight:  1.2;
+  --leading-normal: 1.5;
+  --leading-data:   1.7;  /* stacked mono readouts */
+}

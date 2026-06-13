@@ -1,0 +1,31 @@
+.MetricCard {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.MetricCard__label {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+}
+
+.MetricCard__value {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--status-ok);
+}
+
+.MetricCard__sub {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--text-tertiary);
+}

@@ -1,0 +1,60 @@
+<!-- @dsCard group="Components" viewport="700x280" name="Data display" subtitle="MetricCard, Sparkline, ProgressBar" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; background: var(--bg-app); font-family: var(--font-sans); color: var(--text-primary); padding: 20px; }
+  .cap { font-size: 10px; letter-spacing: 1px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 10px; }
+  .panel { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 14px; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" data-presets="react">
+    function pick(name){ for (const k of Object.keys(window)){ let v; try { v=window[k]; } catch(e){ continue; } if(v&&typeof v==='object'&&typeof v[name]==='function') return v[name]; } return () => null; }
+    const MetricCard = pick('MetricCard'), Sparkline = pick('Sparkline'), ProgressBar = pick('ProgressBar');
+    const series = Array.from({length:48},(_,i)=>40+26*Math.sin(i/4)+12*Math.sin(i/1.7));
+    const cores = [22,64,38,91,47,30,58,73];
+    function Demo(){
+      return (
+        <div style={{display:'flex',flexDirection:'column',gap:18}}>
+          <div>
+            <div className="cap">MetricCard</div>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12}}>
+              <MetricCard label="Temperatura" value="52 °C" sub="CPU · limite 96 °C" level="auto" percent={54} />
+              <MetricCard label="Uptime" value="12d 22h" sub="desde o boot" />
+              <MetricCard label="Processos" value="187" sub="1.204 threads" />
+              <MetricCard label="Carga média" value="1,42" sub="1,31 · 1,18" />
+            </div>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1.4fr 1fr',gap:12}}>
+            <div>
+              <div className="cap">Sparkline</div>
+              <div className="panel" style={{height:96}}><Sparkline data={series} max={100} color="var(--chart-cpu)" fill="var(--chart-cpu-fill)" /></div>
+            </div>
+            <div>
+              <div className="cap">ProgressBar</div>
+              <div className="panel" style={{display:'flex',flexDirection:'column',gap:9}}>
+                {cores.map((v,i)=>(
+                  <div key={i} style={{display:'flex',alignItems:'center',gap:10}}>
+                    <span style={{fontFamily:'var(--font-mono)',fontSize:11,color:'var(--text-secondary)',width:42}}>CPU {i}</span>
+                    <div style={{flex:1}}><ProgressBar value={v} /></div>
+                    <span style={{fontFamily:'var(--font-mono)',fontSize:11,width:38,textAlign:'right',color:'var(--text-secondary)'}}>{v}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+  </script>
+</body>
+</html>

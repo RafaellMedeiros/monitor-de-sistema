@@ -1,0 +1,13 @@
+.Dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    padding: 20px;
+}
+
+.Dashboard main {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 20px;
+}

@@ -1,0 +1,149 @@
+<!-- @dsCard group="Monitor" viewport="1100x720" name="Dashboard" subtitle="Primary app view — chrome, summary tiles, live charts" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  html, body { margin: 0; background: var(--bg-app); }
+  * { box-sizing: border-box; }
+  .app { width: 1100px; height: 720px; display: flex; flex-direction: column; background: var(--bg-app); color: var(--text-primary); font-family: var(--font-sans); font-size: 13px; overflow: hidden; }
+  .mono { font-family: var(--font-mono); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+  /* Title bar */
+  .titlebar { height: 38px; flex-shrink: 0; display: flex; align-items: center; padding: 0 14px; gap: 8px; background: var(--bg-surface); border-bottom: 1px solid var(--border); }
+  .lights { display: flex; gap: 7px; }
+  .light { width: 12px; height: 12px; border-radius: 50%; }
+  .title { flex: 1; text-align: center; font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+  .live { display: flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; color: var(--text-tertiary); }
+
+  .body { flex: 1; display: flex; min-height: 0; }
+
+  /* Sidebar */
+  .sidebar { width: 192px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px; padding: 10px 8px; background: var(--bg-surface); border-right: 1px solid var(--border); }
+  .eyebrow { font-size: 10px; letter-spacing: 1.4px; font-weight: 600; color: var(--text-tertiary); padding: 4px 10px 8px; }
+  .nav { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-md); cursor: pointer; color: var(--text-secondary); }
+  .nav.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .sysinfo { margin-top: auto; padding: 10px; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 10px; line-height: 1.7; color: var(--text-tertiary); }
+  .sysinfo b { color: var(--text-secondary); font-weight: 400; }
+
+  /* Main */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; padding: 14px; gap: 12px; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; }
+  .h-title { font-size: 15px; font-weight: 600; }
+  .h-meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .tile { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; flex-direction: column; gap: 3px; }
+  .tile .lab { font-size: 10px; letter-spacing: 1px; font-weight: 600; color: var(--text-tertiary); }
+  .tile .val { font-family: var(--font-mono); font-size: 22px; font-weight: 600; }
+  .tile .sub { font-size: 11px; color: var(--text-tertiary); }
+
+  .charts { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; min-height: 0; }
+  .chart { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+  .chart .top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .chart .name { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+  .chart .read { font-family: var(--font-mono); font-size: 13px; font-weight: 600; }
+  .legend { display: flex; gap: 12px; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); }
+  .legend .d { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+  .plot { flex: 1; min-height: 0; }
+  .plot svg { width: 100%; height: 100%; display: block; }
+
+  /* Status bar */
+  .statusbar { height: 26px; flex-shrink: 0; display: flex; align-items: center; gap: 16px; padding: 0 12px; background: var(--bg-surface); border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+  <div class="app">
+    <div class="titlebar">
+      <div class="lights"><span class="light" style="background:var(--traffic-red)"></span><span class="light" style="background:var(--traffic-yellow)"></span><span class="light" style="background:var(--traffic-green)"></span></div>
+      <div class="title">Monitor de Sistema — estacao-dev</div>
+      <div class="live"><span style="width:7px;height:7px;border-radius:50%;background:var(--status-ok);animation:pulse 2s ease-in-out infinite"></span>MONITORANDO</div>
+    </div>
+
+    <div class="body">
+      <div class="sidebar">
+        <div class="eyebrow">SISTEMA</div>
+        <div class="nav active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 18.5a9 9 0 1 1 17 0"/><path d="M12 14l4-4"/></svg>Dashboard</div>
+        <div class="nav"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>Processos</div>
+        <div class="nav"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Performance</div>
+        <div class="nav"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18"/><path d="M12 7v5l3.5 2"/></svg>Histórico</div>
+        <div class="nav"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M2 14h4M10 8h4M18 16h4"/></svg>Configurações</div>
+        <div class="sysinfo">
+          <div style="color:var(--text-secondary)">estacao-dev</div>
+          <div>Linux 6.8.0-41-generic</div>
+          <div>8 núcleos · 32 GiB</div>
+          <div>uptime 12d 22h 9min</div>
+        </div>
+      </div>
+
+      <div class="main">
+        <div class="head"><div class="h-title">Dashboard</div><div class="h-meta">tempo real · intervalo 1 s</div></div>
+
+        <div class="tiles">
+          <div class="tile"><div class="lab">TEMPERATURA</div><div class="val" style="color:var(--status-ok)">52 °C</div><div class="sub">CPU · limite 96 °C</div></div>
+          <div class="tile"><div class="lab">UPTIME</div><div class="val">12d 22h</div><div class="sub">desde a última inicialização</div></div>
+          <div class="tile"><div class="lab">PROCESSOS</div><div class="val">187</div><div class="sub">1.204 threads</div></div>
+          <div class="tile"><div class="lab">CARGA MÉDIA</div><div class="val">1,42</div><div class="sub">1,31 · 1,18 (5/15 min)</div></div>
+        </div>
+
+        <div class="charts">
+          <div class="chart">
+            <div class="top"><span class="name">CPU</span><span class="read" style="color:var(--status-ok)">34,2%</span></div>
+            <div class="plot"><svg viewBox="0 0 200 56" preserveAspectRatio="none" data-spark="cpu"></svg></div>
+          </div>
+          <div class="chart">
+            <div class="top"><span class="name">Memória</span><span class="read" style="color:var(--chart-mem)">56,4%</span></div>
+            <div class="plot"><svg viewBox="0 0 200 56" preserveAspectRatio="none" data-spark="mem"></svg></div>
+          </div>
+          <div class="chart">
+            <div class="top"><span class="name">Disco · E/S</span><span class="legend"><span><span class="d" style="background:var(--chart-disk)"></span>L 42 MiB/s</span><span><span class="d" style="background:var(--chart-net)"></span>E 18 MiB/s</span></span></div>
+            <div class="plot"><svg viewBox="0 0 200 56" preserveAspectRatio="none" data-spark="disk"></svg></div>
+          </div>
+          <div class="chart">
+            <div class="top"><span class="name">Rede</span><span class="legend"><span><span class="d" style="background:var(--chart-net)"></span>↓ 2,4 MiB/s</span><span><span class="d" style="background:var(--chart-mem)"></span>↑ 0,4 MiB/s</span></span></div>
+            <div class="plot"><svg viewBox="0 0 200 56" preserveAspectRatio="none" data-spark="net"></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="statusbar">
+      <span>CPU <span style="color:var(--status-ok)">34,2%</span></span>
+      <span>MEM <span style="color:var(--chart-mem)">56,4%</span></span>
+      <span>↓ 2,4 MiB/s</span>
+      <span>↑ 0,4 MiB/s</span>
+      <span style="flex:1"></span>
+      <span>187 processos</span>
+      <span>atualização 1 s</span>
+    </div>
+  </div>
+
+  <script>
+    var css = getComputedStyle(document.documentElement);
+    function c(n){ return css.getPropertyValue(n).trim(); }
+    function seed(n, base, amp, freq){ var a=[]; for(var i=0;i<n;i++){ a.push(base + amp*Math.sin(i/freq) + (amp*0.5)*Math.sin(i/1.7) + (Math.random()-0.5)*amp*0.6); } return a; }
+    function path(arr, max){ var W=200,H=56,n=arr.length, p=[]; for(var i=0;i<n;i++){ var x=(i/(n-1))*W; var y=H-2-(Math.min(Math.max(arr[i],0),max)/max)*(H-6); p.push(x.toFixed(1)+','+y.toFixed(1)); } return 'M'+p.join(' L'); }
+    function grid(){ return [14,28,42].map(function(y){ return '<line x1="0" y1="'+y+'" x2="200" y2="'+y+'" stroke="'+c('--border')+'" stroke-width="0.5"/>'; }).join(''); }
+    function area(d){ return d+' L200,56 L0,56 Z'; }
+    function draw(sel, html){ document.querySelector('[data-spark="'+sel+'"]').innerHTML = html; }
+
+    var cpu = seed(60, 34, 22, 5).map(function(v){return Math.max(2,Math.min(98,v));});
+    draw('cpu', grid()+'<path d="'+area(path(cpu,100))+'" fill="'+c('--chart-cpu-fill')+'"/><path d="'+path(cpu,100)+'" fill="none" stroke="'+c('--chart-cpu')+'" stroke-width="1.5" vector-effect="non-scaling-stroke"/>');
+
+    var mem = seed(60, 56, 6, 9).map(function(v){return Math.max(25,Math.min(92,v));});
+    draw('mem', grid()+'<path d="'+area(path(mem,100))+'" fill="'+c('--chart-mem-fill')+'"/><path d="'+path(mem,100)+'" fill="none" stroke="'+c('--chart-mem')+'" stroke-width="1.5" vector-effect="non-scaling-stroke"/>');
+
+    var dr = seed(60, 90, 70, 4).map(function(v){return Math.max(0,v);});
+    var dw = seed(60, 50, 38, 6).map(function(v){return Math.max(0,v);});
+    var dmax = Math.max.apply(null, dr.concat(dw))*1.15;
+    draw('disk', grid()+'<path d="'+path(dr,dmax)+'" fill="none" stroke="'+c('--chart-disk')+'" stroke-width="1.5" vector-effect="non-scaling-stroke"/><path d="'+path(dw,dmax)+'" fill="none" stroke="'+c('--chart-net')+'" stroke-width="1.5" vector-effect="non-scaling-stroke"/>');
+
+    var nd = seed(60, 2.4, 1.6, 5).map(function(v){return Math.max(0.1,v);});
+    var nu = seed(60, 0.6, 0.4, 7).map(function(v){return Math.max(0.05,v);});
+    var nmax = Math.max.apply(null, nd.concat(nu))*1.15;
+    draw('net', grid()+'<path d="'+area(path(nd,nmax))+'" fill="'+c('--chart-net-fill')+'"/><path d="'+path(nd,nmax)+'" fill="none" stroke="'+c('--chart-net')+'" stroke-width="1.5" vector-effect="non-scaling-stroke"/><path d="'+path(nu,nmax)+'" fill="none" stroke="'+c('--chart-mem')+'" stroke-width="1.5" vector-effect="non-scaling-stroke"/>');
+  </script>
+</body>
+</html>

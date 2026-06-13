@@ -1,0 +1,22 @@
+<!-- @dsCard group="Spacing" viewport="700x170" name="Radii & panels" subtitle="Flat panels, hairline borders, no drop shadows" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--bg-app); font-family: var(--font-sans); padding: 18px; display: flex; gap: 14px; align-items: center; }
+  .box { width: 96px; height: 70px; background: var(--bg-surface); border: 1px solid var(--border); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px; }
+  .lab { font-family: var(--font-mono); font-size: 10px; color: var(--text-secondary); }
+  .lab b { color: var(--text-primary); font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="box" style="border-radius:var(--radius-xs)"><span class="lab"><b>xs</b> 4</span></div>
+  <div class="box" style="border-radius:var(--radius-sm)"><span class="lab"><b>sm</b> 5</span></div>
+  <div class="box" style="border-radius:var(--radius-md)"><span class="lab"><b>md</b> 6</span></div>
+  <div class="box" style="border-radius:var(--radius-lg)"><span class="lab"><b>lg</b> 7</span></div>
+  <div class="box" style="border-radius:var(--radius-xl)"><span class="lab"><b>xl</b> 8</span></div>
+  <div class="box" style="border-radius:var(--radius-pill);width:120px"><span class="lab"><b>pill</b> 999</span></div>
+</body>
+</html>

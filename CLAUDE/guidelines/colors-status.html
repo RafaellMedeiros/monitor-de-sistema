@@ -1,0 +1,41 @@
+<!-- @dsCard group="Colors" viewport="700x180" name="Status levels" subtitle="Normal / attention / critical — the core signal language" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; background: var(--bg-app); font-family: var(--font-sans); padding: 18px; }
+  .row { display: flex; gap: 12px; }
+  .card { flex: 1; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .top { display: flex; align-items: center; gap: 9px; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .val { font-family: var(--font-mono); font-size: 22px; font-weight: 600; }
+  .badge { align-self: flex-start; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; padding: 2px 9px; border-radius: var(--radius-pill); }
+  .meta { font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="card">
+      <div class="top"><span class="dot" style="background:var(--status-ok)"></span><span class="name">Normal</span></div>
+      <div class="val" style="color:var(--status-ok)">34,2%</div>
+      <span class="badge" style="background:var(--status-ok-soft);color:var(--status-ok)">OK</span>
+      <span class="meta">status-ok · #3FB950 · &lt; 60%</span>
+    </div>
+    <div class="card">
+      <div class="top"><span class="dot" style="background:var(--status-warn)"></span><span class="name">Atenção</span></div>
+      <div class="val" style="color:var(--status-warn)">72,8%</div>
+      <span class="badge" style="background:var(--status-warn-soft);color:var(--status-warn)">ALERTA</span>
+      <span class="meta">status-warn · #D29922 · 60–85%</span>
+    </div>
+    <div class="card">
+      <div class="top"><span class="dot" style="background:var(--status-crit)"></span><span class="name">Crítico</span></div>
+      <div class="val" style="color:var(--status-crit)">94,1%</div>
+      <span class="badge" style="background:var(--status-crit-soft);color:var(--status-crit)">CRÍTICO</span>
+      <span class="meta">status-crit · #F85149 · ≥ 85%</span>
+    </div>
+  </div>
+</body>
+</html>

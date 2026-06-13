@@ -1,0 +1,52 @@
+<!-- @dsCard group="Components" viewport="700x230" name="Core controls" subtitle="Button, SegmentedControl, Switch, Badge, StatusDot" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; background: var(--bg-app); font-family: var(--font-sans); color: var(--text-primary); padding: 20px; }
+  .grid { display: flex; flex-direction: column; gap: 18px; }
+  .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .cap { font-size: 10px; letter-spacing: 1px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; width: 100%; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" data-presets="react">
+    // Resolve the generated bundle namespace defensively.
+    function pick(name){ for (const k of Object.keys(window)){ let v; try { v=window[k]; } catch(e){ continue; } if(v&&typeof v==='object'&&typeof v[name]==='function') return v[name]; } return () => null; }
+    const Button = pick('Button'), SegmentedControl = pick('SegmentedControl'), Switch = pick('Switch'), Badge = pick('Badge'), StatusDot = pick('StatusDot');
+    function Demo(){
+      const [tab,setTab]=React.useState('cpu');
+      const [on,setOn]=React.useState(true);
+      return (
+        <div className="grid">
+          <div className="row"><span className="cap">Button</span>
+            <Button variant="primary">Aplicar</Button>
+            <Button>Exportar</Button>
+            <Button variant="ghost">Cancelar</Button>
+            <Button danger>Finalizar processo</Button>
+            <Button disabled>Indisponível</Button>
+          </div>
+          <div className="row"><span className="cap">Segmented · Switch</span>
+            <SegmentedControl value={tab} onChange={setTab} options={[{label:'CPU',value:'cpu'},{label:'Memória',value:'mem'},{label:'Disco',value:'dsk'},{label:'Rede',value:'net'}]} />
+            <Switch checked={on} onChange={setOn} />
+            <Switch checked={!on} onChange={()=>setOn(!on)} />
+          </div>
+          <div className="row"><span className="cap">Badge · StatusDot</span>
+            <Badge level="ok">OK</Badge><Badge level="warn" /><Badge level="crit" /><Badge level="info" />
+            <span style={{width:1,height:16,background:'var(--border)'}}></span>
+            <StatusDot level="ok" pulse /><StatusDot level="warn" /><StatusDot level="crit" /><StatusDot level="idle" />
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+  </script>
+</body>
+</html>

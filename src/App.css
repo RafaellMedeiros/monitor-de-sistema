@@ -1,0 +1,13 @@
+
+.App {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--ink-950);
+}
+
+.App h1{
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 600;
+}

@@ -1,0 +1,5 @@
+/* Webfonts — IBM Plex family.
+   IBM Plex Sans is the UI face; IBM Plex Mono carries every number and
+   technical value. Served from the Google Fonts CDN (each @import target
+   resolves to a stylesheet of @font-face rules). */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
