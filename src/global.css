@@ -108,7 +108,7 @@
     --chart-cpu: var(--blue-500);
     --chart-mem: var(--purple-400);
     --chart-disk: var(--orange-400);
-    --chart-net: var(--cyan-400);
+    --chart-bat: var(--cyan-400);
     --chart-cpu-fill: rgba(88, 166, 255, 0.13);
     --chart-mem-fill: rgba(188, 140, 255, 0.12);
     --chart-net-fill: rgba(57, 197, 207, 0.10);

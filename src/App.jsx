@@ -1,5 +1,6 @@
 import './App.css'
 import Dashboard from './components/Dashboard'
+import Footer from './components/Footer'
 
 export default function App() {
   
@@ -11,6 +12,7 @@ export default function App() {
   return (
     <div className="App">
       <Dashboard />
+      <Footer />
     </div>
   )
 }

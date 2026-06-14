@@ -14,6 +14,7 @@ ipcMain.handle('get-system-info', () => {
     plataforma: process.platform,
     versaoNode: process.versions.node,
     versaoElectron: process.versions.electron,
+    versaoApp: app.getVersion()
   };
 });
 
@@ -38,6 +39,7 @@ ipcMain.handle('get-memory-info', async () => {
   const mem = await si.mem();
 
   return {
+    uso: (mem.active / mem.total) * 100,
     total: mem.total,
     usada: mem.active,
     livre: mem.available,
@@ -61,8 +63,8 @@ ipcMain.handle('get-disk-info', async () => {
       disponivel: disco.available,
       percentualUso: disco.use,
     })),
-    leituraPorSegundo: io.rIO_sec,
-    escritaPorSegundo: io.wIO_sec,
+    leituraPorSegundo: io?.rIO_sec ?? 0,
+    escritaPorSegundo: io?.wIO_sec ?? 0,
   };
 });
 

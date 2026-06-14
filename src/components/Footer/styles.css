@@ -1,0 +1,11 @@
+.Footer {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    display: flex;
+
+    color: var(--text-secondary);
+    justify-content: end;
+
+    gap: 15px;
+}
