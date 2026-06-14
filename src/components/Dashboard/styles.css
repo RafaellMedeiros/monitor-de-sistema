@@ -11,3 +11,7 @@
     grid-template-columns: auto auto auto auto;
     gap: 20px;
 }
+
+.Dashboard main .graphic {
+    grid-column: span 2;
+}
